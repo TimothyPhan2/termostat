@@ -84,22 +84,31 @@ export function cosineSimilarity(vec1: number[], vec2: number[]): number {
   return dotProduct / (magnitude1 * magnitude2);
 }
 
-export function getSimilarityScore(cosScore : number) {
+export function getSimilarityScore(cosScore: number) {
   //0.75 to 0.88
-  //if cosSim is less than 0.75, return a random number between 0 and 100
+
   if (cosScore < 0.75) {
-    return Math.floor(Math.random() * 100);
-  }
-  //if cosSim is greater than or equal to 0.88, return a random number between 900 and 1000
-  else if (cosScore >= 0.85) {
-    return Math.floor(Math.random() * 100 + 900);
-  }
-  else if (cosScore >= 0.83) {
-    return Math.floor(Math.random() * 100 + 800); //
-  }
+    // Map cosScore from [0, 0.75) to [0, 100)
+    return Math.floor((cosScore / 0.75) * 100);
+  } else if (cosScore >= 0.87) {
+    // Map cosScore from [0.87, 1] to [950, 1000]
+    return Math.ceil(((cosScore - 0.87) / (1 - 0.87)) * 50 + 950);
+  } else if (cosScore >= 0.85) {
+    // Map cosScore from [0.85, 0.87) to [900, 950)
+    return Math.floor(((cosScore - 0.85) / (0.87 - 0.85)) * 50 + 900);
+  } else if (cosScore >= 0.84) {
+    // Map cosScore from [0.84, 0.85) to [850, 900)
+    return Math.floor(((cosScore - 0.84) / (0.85 - 0.84)) * 50 + 850);
+  } else if (cosScore >= 0.83) {
+    // Map cosScore from [0.83, 0.84) to [800, 850)
+    return Math.floor(((cosScore - 0.83) / (0.84 - 0.83)) * 50 + 800);
+  } /* else {
+    // Map cosScore from [0.75, 0.83) to [100, 800)
+    return Math.floor(((cosScore - 0.75) / (0.83 - 0.75)) * 700 + 100);
+  } */
   
   const cosSim = Math.ceil(((cosScore - 0.75) / 0.10) * 1000);
-  
+
   return Math.min(1000, cosSim);
 }
 
