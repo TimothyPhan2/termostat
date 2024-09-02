@@ -2,25 +2,34 @@
   "name": "nextjs",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "upsert-words": "node --experimental-loader ts-node/esm --no-warnings scripts/upsertWords.ts"
   },
   "dependencies": {
+    "@langchain/groq": "^0.0.17",
+    "@langchain/openai": "^0.2.8",
+    "@langchain/pinecone": "^0.0.9",
+    "@langchain/textsplitters": "^0.0.3",
+    "langchain": "^0.2.17",
+    "next": "14.2.7",
+    "nextjs": "file:",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.7"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@types/node": "^20.16.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.7",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.7"
+    "typescript": "^5.5.4"
   }
 }
