@@ -6,9 +6,13 @@ import { createRetrievalChain } from "langchain/chains/retrieval";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { env } from "./config.ts";
+import { getRandomLine } from "./txt-loader.ts";
 
-export async function callChain(guessedWord: string, targetWord: string) {
+export async function callChain(guessedWord: string) {
     const embeddings = new OpenAIEmbeddings({ apiKey: env.OPENAI_API_KEY });
+
+    const targetWord = await getRandomLine("data/words.txt"); //gets random word from words.txt
+    
     const tWordVector = await getWordVector(targetWord);
     const gWordVector = (await embeddings.embedDocuments([guessedWord]))[0];
     const cosSim = cosineSimilarity(tWordVector, gWordVector);
