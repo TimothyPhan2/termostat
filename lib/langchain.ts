@@ -61,7 +61,7 @@ export async function callChain(guessedWord: string, targetWord: string) {
             "hint3": "string"
             }}
         }}`,
-    `Ensure that the output is a valid JSON object.`,
+    `Ensure that the output is a valid JSON object without any additional formatting or code block syntax.`,
     `Context: {context}`,
   ].join("\n\n");
 
@@ -75,6 +75,7 @@ export async function callChain(guessedWord: string, targetWord: string) {
     model: "gpt-4o",
     temperature: 0,
     streaming: false,
+    
   });
 
   const pineconeClient = await getPineconeClient();

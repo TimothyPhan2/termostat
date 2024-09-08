@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Clock, Loader2, Menu } from "lucide-react";
+import { Clock, Flame, Loader2, Menu } from "lucide-react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Sidebar from "./Sidebar";
@@ -12,14 +12,12 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-
+import { saveLB, saveUser } from "@/db/functions";
 
 type GuessType = {
   word: string;
   similarityScore: number;
 };
-
-
 
 export default function Game() {
   const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(true);
@@ -34,7 +32,6 @@ export default function Game() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasGuessed, setHasGuessed] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [multiplier, setMultiplier] = useState(1);
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
@@ -45,7 +42,6 @@ export default function Game() {
     } else if (timeLeft === 0) {
       setIsGameOver(true);
       setStreak(0);
-      setMultiplier(1);
     }
     return () => clearInterval(timer);
   }, [timeLeft, isHowToPlayOpen, isGameOver]);
@@ -108,7 +104,11 @@ export default function Game() {
       console.log("Hints", parsedData.hints);
       console.log("SImilarity Score", parsedData.similarityScore);
       const newGuess = { word: currentGuess, similarityScore: similarityScore };
-      setGuesses((prevGuesses) => [newGuess, ...prevGuesses.slice(0, 4)]); // Keep only the last 5 guesses
+      setGuesses((prevGuesses) => {
+        return [...prevGuesses, newGuess]
+          .sort((a, b) => b.similarityScore - a.similarityScore)
+          .slice(0, 10);
+      });
       setCurrentGuess("");
       setHasGuessed(true);
       if (similarityScore > highestScore) {
@@ -117,12 +117,11 @@ export default function Game() {
       if (similarityScore === 1000) {
         setIsGameOver(true);
 
-        setStreak(prevStreak => prevStreak + 1);
-        
+        setStreak((prevStreak) => prevStreak + 1);
       }
     } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -144,8 +143,44 @@ export default function Game() {
     setPlayAgain(true);
     setHasGuessed(false);
     setHints([]);
+    setCurrentGuess("");
   };
   const { user, isSignedIn, isLoaded } = useUser();
+
+  const handleGameOver = async () => {
+    if (user && isSignedIn && isLoaded) {
+      await fetch("/api/saveUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          name: user.fullName,
+          profile_pic: user.imageUrl,
+          streak: streak,
+        }),
+      });
+
+      await fetch("/api/saveLeaderboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          score: highestScore,
+          gamesWon: highestScore === 1000 ? 1 : 0,
+        }),
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isGameOver) {
+      handleGameOver();
+    }
+  }, [isGameOver]);
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* User Profile and Mobile Menu */}
@@ -159,7 +194,11 @@ export default function Game() {
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col space-y-4">
-                <Sidebar isMobile={true} hints={hints} hasGuessed={hasGuessed}/>
+                <Sidebar
+                  isMobile={true}
+                  hints={hints}
+                  hasGuessed={hasGuessed}
+                />
               </nav>
             </SheetContent>
           </Sheet>
@@ -167,11 +206,10 @@ export default function Game() {
             <div className="flex-1 flex justify-end items-center space-x-4">
               <UserButton />
               <Link href={"/leaderboard"}>
-              <Button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                Leaderboard
-              </Button>
+                <Button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                  Leaderboard
+                </Button>
               </Link>
-              
             </div>
           )}
         </div>
@@ -181,7 +219,7 @@ export default function Game() {
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Hints and Legend (hidden on mobile) */}
         <div className="hidden lg:block">
-        <Sidebar isMobile={false} hints={hints} hasGuessed={hasGuessed}/>
+          <Sidebar isMobile={false} hints={hints} hasGuessed={hasGuessed} />
         </div>
 
         {/* Game content */}
@@ -189,9 +227,15 @@ export default function Game() {
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
               <h1 className="text-2xl font-bold">Termostat</h1>
-              <div className="flex items-center bg-blue-100 px-3 py-1 rounded-full">
-                <Clock className="h-4 w-4 mr-2" />
-                <span className="font-semibold">{timeLeft}s</span>
+              <div className="flex gap-5">
+                <div className="flex items-center bg-blue-100 px-3 py-1 rounded-full">
+                  <Clock className="h-4 w-4 mr-2" />
+                  <span className="font-semibold">{timeLeft}s</span>
+                </div>
+                <div className="flex items-center bg-red-100 px-3 py-1 rounded-full">
+                  <Flame className="h-4 w-4 mr-2" />
+                  <span className="font-semibold">Streak: {streak}</span>
+                </div>
               </div>
             </div>
 
@@ -228,12 +272,11 @@ export default function Game() {
                   >
                     {isLoading ? (
                       <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Checking...
-                    </>
-                    ): (
-
-                    'Guess'
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Checking...
+                      </>
+                    ) : (
+                      "Guess"
                     )}
                   </Button>
                 </div>
