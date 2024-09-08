@@ -1,19 +1,16 @@
-import { X } from 'lucide-react'
+
 
 type HowToPlayModalProps = {
-  onClose: () => void
   onStartGame: () => void
 }
 
-export default function HowToPlayModal({ onClose, onStartGame }: HowToPlayModalProps) {
+export default function HowToPlayModal({ onStartGame }: HowToPlayModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">How to Play</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-            <X className="h-6 w-6" />
-          </button>
+     
         </div>
         <div className="mb-6">
           <p className="mb-2">1. You have 60 seconds to guess the target word.</p>

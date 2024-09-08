@@ -7,6 +7,8 @@ export const usersTable = pgTable('users_table', {
   createTs: timestamp('create_ts').defaultNow().notNull(),
   name: text('name').notNull(),
   streak: integer('streak').default(0).notNull(),
+  profile_pic: text('profile_pic').notNull(),
+
 });
 
 export const leaderboardTable = pgTable('leaderboard_table', {
@@ -14,5 +16,6 @@ export const leaderboardTable = pgTable('leaderboard_table', {
   createTs: timestamp('create_ts').defaultNow().notNull(),
   user_id: text('user_id').notNull().references(() => usersTable.user_id),
   score: integer('score').notNull(),
+  gamesWon: integer('games_won').notNull(),
 })
 

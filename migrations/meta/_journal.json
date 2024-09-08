@@ -15,6 +15,13 @@
       "when": 1725515335197,
       "tag": "0001_mute_donald_blake",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725779249477,
+      "tag": "0002_flimsy_catseye",
+      "breakpoints": true
     }
   ]
 }
