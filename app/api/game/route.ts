@@ -7,7 +7,12 @@ export async function POST(req: Request) {
         const res = await callChain(userGuess, targetWord);
         console.log(res);
         
-        return NextResponse.json(res);
+        return NextResponse.json(res, {
+            headers: {
+              'Cache-Control': 'no-store, max-age=0',
+              'Pragma': 'no-cache'
+            }
+          });
     } catch (error) {
         return NextResponse.error();
     }

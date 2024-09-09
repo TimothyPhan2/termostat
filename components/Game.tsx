@@ -53,7 +53,13 @@ export default function Game() {
   };
   const fetchWord = useCallback(async () => {
     try {
-      const response = await fetch("/api/targetWord");
+      const response = await fetch(`/api/targetWord?t=${Date.now()}`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+          },
+        });
       const data = await response.json();
       console.log(data.targetWord);
       setTargetWord(data.targetWord);
@@ -81,10 +87,12 @@ export default function Game() {
 
     setIsLoading(true);
     try {
-      const res = await fetch("/api/game", {
+      const res = await fetch(`/api/game`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         },
         body: JSON.stringify({
           targetWord: targetWord,
@@ -163,6 +171,8 @@ export default function Game() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -176,6 +186,8 @@ export default function Game() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         },
         body: JSON.stringify({
           user_id: user.id,

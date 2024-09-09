@@ -6,7 +6,12 @@ export async function POST(req: Request) {
         const {user_id, score, gamesWon} = await req.json();
         await saveLB({user_id, score, gamesWon});
         console.log("Leaderboard entry saved successfully");
-        return NextResponse.json({message: "Leaderboard entry saved successfully"});
+        return NextResponse.json({message: "Leaderboard entry saved successfully"}, {
+            headers: {
+              'Cache-Control': 'no-store, max-age=0',
+              'Pragma': 'no-cache'
+            }
+          });
     } catch (error) {
         console.error("Error saving leaderboard entry", error);
         return NextResponse.error();
