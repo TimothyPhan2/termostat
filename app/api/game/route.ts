@@ -11,9 +11,8 @@ export async function POST(req: Request) {
             headers: {
               'Cache-Control': 'no-store, max-age=0',
               'Pragma': 'no-cache',
-               'Access-Control-Allow-Origin': '*', // Or specify allowed origins
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
+             'Expires': '0',
+    
             }
           });
     } catch (error) {

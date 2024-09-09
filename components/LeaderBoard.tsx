@@ -65,7 +65,8 @@ export default function LeaderboardComponent() {
           cache: "no-store",
           headers: {
             "Cache-Control": "no-cache",
-            Pragma: "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
           },
         });
         if (!res.ok) {

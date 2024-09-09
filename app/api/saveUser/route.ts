@@ -9,7 +9,9 @@ export async function POST(req: Request){
         return NextResponse.json({message: "User saved successfully"}, {
             headers: {
               'Cache-Control': 'no-store, max-age=0',
-              'Pragma': 'no-cache'
+              'Pragma': 'no-cache',
+              'Expires': '0',
+    
             }
           });
     } catch (error) {
