@@ -1,6 +1,6 @@
 import { getRandomLine } from "@/lib/txt-loader";
 import { NextResponse } from "next/server";
-export const runtime = "edge"
+
 export async function GET(){
     try {
         const targetWord = await getRandomLine("data/words.txt"); //gets random word from words.txt
