@@ -21,7 +21,10 @@ export async function GET() {
           return NextResponse.json(result, {
             headers: {
               'Cache-Control': 'no-store, max-age=0',
-              'Pragma': 'no-cache'
+              'Pragma': 'no-cache',
+              'Access-Control-Allow-Origin': '*', // Or specify allowed origins
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
             }
           });
     } catch (error) {
