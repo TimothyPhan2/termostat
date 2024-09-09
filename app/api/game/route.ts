@@ -1,8 +1,6 @@
 import { callChain } from "@/lib/langchain";
 import { NextResponse } from "next/server";
-export const config = {
-    runtime: 'edge',
-  };
+export const runtime = "edge"
 export async function POST(req: Request) {
     try {
         const { targetWord, userGuess } = await req.json();

@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db/db";
 import { leaderboardTable, usersTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = "edge"
 export async function GET() {
     const db = getDb();
     try {
