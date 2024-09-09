@@ -68,19 +68,19 @@ export default function Sidebar({
         <div className="space-y-2">
           <div className="flex items-center">
             <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-            <span>0-249: Cold</span>
+            <span>0-349: Very Cold</span>
           </div>
           <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-            <span>250-499: Warm</span>
+            <div className="w-4 h-4 rounded-full bg-purple-600 mr-2"></div>
+            <span>350-549: Cold</span>
           </div>
           <div className="flex items-center">
             <div className="w-4 h-4 rounded-full bg-orange-500 mr-2"></div>
-            <span>500-749: Hot</span>
+            <span>550-749: Warm</span>
           </div>
           <div className="flex items-center">
             <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-            <span>750-1000: Very Hot</span>
+            <span>750-1000: Hot</span>
           </div>
         </div>
       </div>

@@ -12,19 +12,19 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { saveLB, saveUser } from "@/db/functions";
+import GiveUpButton from "./GiveUpButton";
 
 type GuessType = {
   word: string;
   similarityScore: number;
 };
-
+const GAME_DURATION = 600;
 export default function Game() {
   const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(true);
   const [guesses, setGuesses] = useState<GuessType[]>([]);
   const [currentGuess, setCurrentGuess] = useState("");
   const [highestScore, setHighestScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
+  const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [targetWord, setTargetWord] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
   const [playAgain, setPlayAgain] = useState(false);
@@ -32,7 +32,7 @@ export default function Game() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasGuessed, setHasGuessed] = useState(false);
   const [streak, setStreak] = useState(0);
-
+  const [currentScore, setCurrentScore] = useState(0);
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (!isHowToPlayOpen && timeLeft > 0 && !isGameOver) {
@@ -46,6 +46,11 @@ export default function Game() {
     return () => clearInterval(timer);
   }, [timeLeft, isHowToPlayOpen, isGameOver]);
 
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
   const fetchWord = useCallback(async () => {
     try {
       const response = await fetch("/api/targetWord");
@@ -101,6 +106,7 @@ export default function Game() {
       ]);
       console.log("State Hints", hints);
       const similarityScore = parsedData.similarityScore;
+      setCurrentScore(similarityScore);
       console.log("Hints", parsedData.hints);
       console.log("SImilarity Score", parsedData.similarityScore);
       const newGuess = { word: currentGuess, similarityScore: similarityScore };
@@ -127,8 +133,8 @@ export default function Game() {
   };
 
   const getTemperatureColor = (score: number) => {
-    if (score < 250) return "bg-blue-500";
-    if (score < 500) return "bg-yellow-500";
+    if (score < 350) return "bg-blue-500";
+    if (score < 550) return "bg-purple-600";
     if (score < 750) return "bg-orange-500";
     return "bg-red-500";
   };
@@ -136,7 +142,7 @@ export default function Game() {
   const resetGame = () => {
     setGuesses([]);
     setHighestScore(0);
-    setTimeLeft(60);
+    setTimeLeft(GAME_DURATION);
     setIsGameOver(false);
     setIsHowToPlayOpen(false);
     setTargetWord("");
@@ -144,9 +150,13 @@ export default function Game() {
     setHasGuessed(false);
     setHints([]);
     setCurrentGuess("");
+    setCurrentScore(0);
   };
   const { user, isSignedIn, isLoaded } = useUser();
 
+  const handleGiveUp = () => {
+    setIsGameOver(true);
+  }
   const handleGameOver = async () => {
     if (user && isSignedIn && isLoaded) {
       await fetch("/api/saveUser", {
@@ -193,6 +203,7 @@ export default function Game() {
               </button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+          
               <nav className="flex flex-col space-y-4">
                 <Sidebar
                   isMobile={true}
@@ -226,16 +237,17 @@ export default function Game() {
         <div className="flex-1 p-4 overflow-auto">
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
-              <h1 className="text-2xl font-bold">Termostat</h1>
+              <h1 className="text-2xl font-bold">Termometer</h1>
               <div className="flex gap-5">
                 <div className="flex items-center bg-blue-100 px-3 py-1 rounded-full">
                   <Clock className="h-4 w-4 mr-2" />
-                  <span className="font-semibold">{timeLeft}s</span>
+                  <span className="font-semibold">{formatTime(timeLeft)}</span>
                 </div>
                 <div className="flex items-center bg-red-100 px-3 py-1 rounded-full">
                   <Flame className="h-4 w-4 mr-2" />
                   <span className="font-semibold">Streak: {streak}</span>
                 </div>
+                <GiveUpButton onGiveUp={handleGiveUp} isGameActive={!isGameOver && timeLeft > 0} />
               </div>
             </div>
 
@@ -243,12 +255,12 @@ export default function Game() {
             <div className="mb-4 relative h-8 bg-gray-300 rounded-full overflow-hidden">
               <div
                 className={`absolute top-0 left-0 h-full transition-all duration-500 ease-in-out ${getTemperatureColor(
-                  highestScore
+                  currentScore
                 )}`}
-                style={{ width: `${(highestScore / 1000) * 100}%` }}
+                style={{ width: `${(currentScore / 1000) * 100}%` }}
               ></div>
               <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                <span className="text-sm font-bold">{highestScore}</span>
+                <span className="text-sm font-bold">{currentScore}</span>
               </div>
             </div>
 

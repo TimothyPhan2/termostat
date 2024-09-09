@@ -4,6 +4,8 @@ import { config } from "dotenv";
 
 config({ path: ".env.local" }); // or .env.local
 
-const sql = neon(process.env.DATABASE_URL!);
+export function getDb() {
+  const sql = neon(process.env.DATABASE_URL!);
+  return drizzle(sql);
+}
 
-export const db = drizzle(sql);

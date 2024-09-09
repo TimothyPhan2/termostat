@@ -1,7 +1,8 @@
-import { db } from "./db";
+import { getDb } from "./db";
 import { usersTable, leaderboardTable } from "./schema";
 import { sql } from "drizzle-orm";
 export async function saveUser(user: {user_id: string, name: string | null, profile_pic: string, streak: number}) {
+    const db = getDb();
     try {
         await db.insert(usersTable).values({
             user_id: user.user_id,
@@ -23,6 +24,7 @@ export async function saveUser(user: {user_id: string, name: string | null, prof
 }
 
 export async function saveLB(entry: {user_id: string, score:number, gamesWon: number}) {
+    const db = getDb();
     try {
         await db.insert(leaderboardTable).values({
             user_id: entry.user_id,

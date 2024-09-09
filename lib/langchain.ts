@@ -43,7 +43,7 @@ export async function callChain(guessedWord: string, targetWord: string) {
      - Words closer to the start of the context array should receive a higher boost.
      - Example: If the current score is 700, the maximum boost should be between 30-60 points (10-20% of 300).`,
     `Only return a score of 1000 if the guessed word is exactly the same as the target word.`,
-    `Only increase the calculated similarity score if necessary. Do not decrease the calculated similarity score.`,
+    `Increase the calculated similarity score if necessary. Decrease the calculated similarity score if the guessed word has no association with the target word.`,
     `If the guessed word is not a valid word, return a score of 0.`,
     //`Context: {context}`,
     `Return the similarity score as a number between 0 and 1000. Remember, only return 1000 if the guessed word is exactly the same as the target word.`,

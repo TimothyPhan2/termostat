@@ -13,7 +13,7 @@ export default function HowToPlayModal({ onStartGame }: HowToPlayModalProps) {
      
         </div>
         <div className="mb-6">
-          <p className="mb-2">1. You have 60 seconds to guess the target word.</p>
+          <p className="mb-2">1. You have 10 minutes to guess the target word.</p>
           <p className="mb-2">2. Enter words that you think are related to the target word.</p>
           <p className="mb-2">3. Each guess will receive a similarity score from 0 to 1000.</p>
           <p className="mb-2">4. The color and position of the thermometer indicate how close you are.</p>
