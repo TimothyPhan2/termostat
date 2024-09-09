@@ -58,6 +58,7 @@ export default function Game() {
           headers: {
             "Cache-Control": "no-cache",
             "Pragma": "no-cache",
+            "Expires": "0",
           },
         });
       const data = await response.json();
@@ -92,7 +93,8 @@ export default function Game() {
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
+          "Pragma": "no-cache",
+          "Expires": "0",
         },
         body: JSON.stringify({
           targetWord: targetWord,
@@ -173,6 +175,7 @@ export default function Game() {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
             "Pragma": "no-cache",
+            "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -188,6 +191,7 @@ export default function Game() {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
             "Pragma": "no-cache",
+            "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
