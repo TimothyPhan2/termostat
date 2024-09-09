@@ -55,7 +55,7 @@ export default function Game() {
     try {
       const response = await fetch("/api/targetWord");
       const data = await response.json();
-      console.log(data.targetWord);
+    
       setTargetWord(data.targetWord);
       setPlayAgain(false);
     } catch (error) {
@@ -96,19 +96,17 @@ export default function Game() {
       }
       const data = await res.json();
 
-      console.log("testing", data);
-      console.log("Parsed", JSON.parse(data.answer));
+  
       const parsedData = JSON.parse(data.answer);
       setHints([
         parsedData.hints.hint1,
         parsedData.hints.hint2,
         parsedData.hints.hint3,
       ]);
-      console.log("State Hints", hints);
+   
       const similarityScore = parsedData.similarityScore;
       setCurrentScore(similarityScore);
-      console.log("Hints", parsedData.hints);
-      console.log("SImilarity Score", parsedData.similarityScore);
+  
       const newGuess = { word: currentGuess, similarityScore: similarityScore };
       setGuesses((prevGuesses) => {
         return [...prevGuesses, newGuess]

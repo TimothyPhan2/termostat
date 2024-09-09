@@ -72,7 +72,7 @@ export default function LeaderboardComponent() {
           throw new Error("Failed to fetch leaderboard data");
         }
         const data = await res.json();
-        console.log(data.rows);
+        
         setLeaderboardData(data.rows);
       } catch (error) {
         console.error("Error fetching leaderboard data", error);
@@ -89,7 +89,7 @@ export default function LeaderboardComponent() {
       return b[sortField] - a[sortField];
     }
   });
-  console.log(sortedPlayers);
+
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentPlayers = sortedPlayers.slice(indexOfFirstItem, indexOfLastItem);
