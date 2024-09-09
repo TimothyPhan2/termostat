@@ -71,6 +71,7 @@ export default function Game() {
   }, []);
   useEffect(() => {
     if (playAgain) {
+      console.log("Fetching new word");
       fetchWord();
       setPlayAgain(false);
     }
