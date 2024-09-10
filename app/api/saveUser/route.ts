@@ -1,9 +1,6 @@
 import { saveUser } from "@/db/functions";
 import { NextResponse } from "next/server";
 
-
-export const dynamic = "force-dynamic"
-export const fetchCache = 'force-no-store'
 export async function POST(req: Request){
     try {
         const { user_id, name, profile_pic, streak } = await req.json();

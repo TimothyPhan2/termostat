@@ -3,9 +3,6 @@ import { getDb } from "@/db/db";
 import { leaderboardTable, usersTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
 
-
-export const dynamic = "force-dynamic"
-export const fetchCache = 'force-no-store'
 export async function GET() {
     const db = getDb();
     try {
