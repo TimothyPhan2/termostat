@@ -62,7 +62,8 @@ export default function Game() {
           },
         });
       const data = await response.json();
-      console.log(data.targetWord);
+
+      console.log("New target word fetched:", data.targetWord);
       setTargetWord(data.targetWord);
       setPlayAgain(false);
     } catch (error) {
