@@ -53,9 +53,18 @@ export default function Game() {
   };
   const fetchWord = useCallback(async () => {
     try {
-      const response = await fetch("/api/targetWord");
+      const response = await fetch(`/api/targetWord/${Date.now()}`, {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
+          },
+        });
       const data = await response.json();
-    
+
+      console.log("New target word fetched:", data.targetWord);
       setTargetWord(data.targetWord);
       setPlayAgain(false);
     } catch (error) {
@@ -64,6 +73,7 @@ export default function Game() {
   }, []);
   useEffect(() => {
     if (playAgain) {
+      console.log("Fetching new word");
       fetchWord();
       setPlayAgain(false);
     }
@@ -81,10 +91,13 @@ export default function Game() {
 
     setIsLoading(true);
     try {
-      const res = await fetch("/api/game", {
+      const res = await fetch(`/api/game`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+          "Pragma": "no-cache",
+          "Expires": "0",
         },
         body: JSON.stringify({
           targetWord: targetWord,
@@ -96,17 +109,19 @@ export default function Game() {
       }
       const data = await res.json();
 
-  
+      console.log("testing", data);
+      console.log("Parsed", JSON.parse(data.answer));
       const parsedData = JSON.parse(data.answer);
       setHints([
         parsedData.hints.hint1,
         parsedData.hints.hint2,
         parsedData.hints.hint3,
       ]);
-   
+      console.log("State Hints", hints);
       const similarityScore = parsedData.similarityScore;
       setCurrentScore(similarityScore);
-  
+      console.log("Hints", parsedData.hints);
+      console.log("SImilarity Score", parsedData.similarityScore);
       const newGuess = { word: currentGuess, similarityScore: similarityScore };
       setGuesses((prevGuesses) => {
         return [...prevGuesses, newGuess]
@@ -155,12 +170,15 @@ export default function Game() {
   const handleGiveUp = () => {
     setIsGameOver(true);
   }
-  const handleGameOver = async () => {
+  const handleGameOver = useCallback(async () => {
     if (user && isSignedIn && isLoaded) {
       await fetch("/api/saveUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -174,6 +192,9 @@ export default function Game() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -182,13 +203,13 @@ export default function Game() {
         }),
       });
     }
-  };
+  }, [user, isSignedIn, isLoaded, streak, highestScore]);
 
   useEffect(() => {
     if (isGameOver) {
       handleGameOver();
     }
-  }, [isGameOver]);
+  }, [isGameOver, handleGameOver]);
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* User Profile and Mobile Menu */}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db/db";
 import { leaderboardTable, usersTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
+export const fetchCache = 'force-no-store'
 export async function GET() {
     const db = getDb();
     try {
@@ -21,7 +22,9 @@ export async function GET() {
           return NextResponse.json(result, {
             headers: {
               'Cache-Control': 'no-store, max-age=0',
-              'Pragma': 'no-cache'
+              'Pragma': 'no-cache',
+              'Expires': '0',
+    
             }
           });
     } catch (error) {
