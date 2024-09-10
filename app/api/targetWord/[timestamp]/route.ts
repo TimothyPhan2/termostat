@@ -6,7 +6,7 @@ export async function GET(){
     try {
       const filePath = path.join(process.cwd(), "data/words.txt");
         const targetWord = await getRandomLine(filePath); //gets random word from words.txt
-        console.log("wow",targetWord);
+      
         return NextResponse.json({ targetWord }, {
             headers: {
               'Cache-Control': 'no-store, max-age=0',
