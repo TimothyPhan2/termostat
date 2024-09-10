@@ -1,7 +1,8 @@
 import { callChain } from "@/lib/langchain";
 import { NextResponse } from "next/server";
-
+export const fetchCache = 'force-no-store'
 export async function POST(req: Request) {
+    
     try {
         const { targetWord, userGuess } = await req.json();
         const res = await callChain(userGuess, targetWord);
