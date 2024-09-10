@@ -168,7 +168,7 @@ export default function Game() {
   const handleGiveUp = () => {
     setIsGameOver(true);
   }
-  const handleGameOver = async () => {
+  const handleGameOver = useCallback(async () => {
     if (user && isSignedIn && isLoaded) {
       await fetch("/api/saveUser", {
         method: "POST",
@@ -201,13 +201,13 @@ export default function Game() {
         }),
       });
     }
-  };
+  }, [user, isSignedIn, isLoaded, streak, highestScore]);
 
   useEffect(() => {
     if (isGameOver) {
       handleGameOver();
     }
-  }, [isGameOver]);
+  }, [isGameOver, handleGameOver]);
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* User Profile and Mobile Menu */}
