@@ -1,9 +1,11 @@
 import { getRandomLine } from "@/lib/txt-loader";
 import { NextResponse } from "next/server";
+import path from "path";
 
 export async function GET(){
     try {
-        const targetWord = await getRandomLine("data/words.txt"); //gets random word from words.txt
+      const filePath = path.join(process.cwd(), "data/words.txt");
+        const targetWord = await getRandomLine(filePath); //gets random word from words.txt
         console.log("wow",targetWord);
         return NextResponse.json({ targetWord }, {
             headers: {
