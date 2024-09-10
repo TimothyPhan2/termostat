@@ -17,7 +17,7 @@ export async function GET() {
             INNER JOIN ${usersTable} ON ${leaderboardTable.user_id} = ${usersTable.user_id}
           `);
       
-          console.log("Fetched leaderboard data:", result);
+         
       
           return NextResponse.json(result, {
             headers: {
