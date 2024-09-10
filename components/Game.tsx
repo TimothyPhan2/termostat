@@ -53,7 +53,7 @@ export default function Game() {
   };
   const fetchWord = useCallback(async () => {
     try {
-      const response = await fetch(`/api/targetWord?t=${Date.now()}`, {
+      const response = await fetch(`/api/targetWord/${Date.now()}`, {
           method: "GET",
           cache: "no-store",
           headers: {

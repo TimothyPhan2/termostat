@@ -61,7 +61,7 @@ export default function LeaderboardComponent() {
     const fetchLBData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/getLeaderBoard?t=${Date.now()}`, {
+        const res = await fetch(`/api/getLeaderBoard/${Date.now()}`, {
           method: "GET",
           cache: "no-store",
           headers: {
