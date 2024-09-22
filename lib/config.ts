@@ -8,7 +8,8 @@ const envSchema = z.object({
     PINECONE_INDEX_NAME: z.string().trim().min(1),
     PINECONE_NAMESPACE: z.string().trim().min(1),
     OPENAI_API_KEY: z.string().trim().min(1),
-    GROQ_API_KEY: z.string().trim().min(1),
+    DATABASE_URL: z.string().trim().min(1),
+    
 });
 
 export const env = envSchema.parse(process.env);
