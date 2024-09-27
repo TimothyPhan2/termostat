@@ -54,18 +54,18 @@ export default function Game() {
   const fetchWord = useCallback(async () => {
     try {
       const response = await fetch(`/api/targetWord/${Date.now()}`, {
-          method: "GET",
-          cache: "no-store",
-          headers: {
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Expires": "0",
-          },
-        });
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
       const data = await response.json();
 
-      
       setTargetWord(data.targetWord);
+      setHints([data.hints.hint1, data.hints.hint2, data.hints.hint3]);
       setPlayAgain(false);
     } catch (error) {
       console.log(error);
@@ -73,7 +73,7 @@ export default function Game() {
   }, []);
   useEffect(() => {
     if (playAgain) {
-      
+
       fetchWord();
       setPlayAgain(false);
     }
@@ -101,7 +101,7 @@ export default function Game() {
         },
         body: JSON.stringify({
           targetWord: targetWord,
-          userGuess: currentGuess,
+          userGuess: currentGuess.toLowerCase(),
         }),
       });
       if (!res.ok) {
@@ -109,18 +109,13 @@ export default function Game() {
       }
       const data = await res.json();
 
-   
-      const parsedData = JSON.parse(data.answer);
-      setHints([
-        parsedData.hints.hint1,
-        parsedData.hints.hint2,
-        parsedData.hints.hint3,
-      ]);
-     
-      const similarityScore = parsedData.similarityScore;
+
+      //const parsedData = JSON.parse(data.answer);
+      
+      const similarityScore = data.similarityScore; //changed from parsedData.similarityScore
       setCurrentScore(similarityScore);
-  
-      const newGuess = { word: currentGuess, similarityScore: similarityScore };
+
+      const newGuess = { word: currentGuess.toLowerCase(), similarityScore: similarityScore };
       setGuesses((prevGuesses) => {
         return [...prevGuesses, newGuess]
           .sort((a, b) => b.similarityScore - a.similarityScore)
@@ -175,8 +170,8 @@ export default function Game() {
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Expires": "0",
+          "Pragma": "no-cache",
+          "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -191,8 +186,8 @@ export default function Game() {
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Expires": "0",
+          "Pragma": "no-cache",
+          "Expires": "0",
         },
         body: JSON.stringify({
           user_id: user.id,
@@ -220,7 +215,7 @@ export default function Game() {
               </button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-          
+
               <nav className="flex flex-col space-y-4">
                 <Sidebar
                   isMobile={true}

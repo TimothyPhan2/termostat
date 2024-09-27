@@ -93,3 +93,52 @@ export async function callChain(guessedWord: string, targetWord: string) {
 
   return result;
 }
+
+export async function createHints(targetWord: string) {
+  const systemTemplate = [
+    `You are a word association game engine. You have been asked to create hints for a target word.`,
+    `The target word is a word that the user is trying to guess.`,
+    `The hints should be a clue about what the target word is.`,
+    `Hint 1 should be a broad overarching theme or category that the target word could belong to.`,
+    `Hint 2 should be the part of speech that the target word is (ex: Noun, Adjective, Verb).`,
+    `Hint 3 should be the number of letters in the target word.`,
+    `Return response as a JSON object with the following schema:
+        {{
+          "hints": {{
+            "hint1": "string",
+            "hint2": "string",
+            "hint3": "string"
+            }}
+        }}`,
+    `Ensure that the output is a valid JSON object without any additional formatting or code block syntax.`,
+    `The target word is: ${targetWord}`,
+    `Context: {context}`,
+  ].join("\n\n");
+
+  const prompt = ChatPromptTemplate.fromMessages([
+    ["system", systemTemplate],
+    ["human", "{input}"],
+  ] as const);
+
+  const llm = new ChatOpenAI({
+    apiKey: env.OPENAI_API_KEY,
+    model: "gpt-4o",
+    temperature: 0,
+    streaming: false,
+  });
+
+  const pineconeClient = await getPineconeClient();
+  const vectorStore = await getVectorStore(pineconeClient);
+
+  const hintsChain = await createStuffDocumentsChain({ llm, prompt });
+  const ragChain = await createRetrievalChain({
+    retriever: vectorStore.asRetriever(1), //specify the amount of context documents to return
+    combineDocsChain: hintsChain,
+  });
+
+  const result = await ragChain.invoke({
+    input: `${targetWord}`,
+  });
+
+  return result;
+}
