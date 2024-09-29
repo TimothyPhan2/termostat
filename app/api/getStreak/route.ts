@@ -9,7 +9,7 @@ export const fetchCache = "force-no-store";
 export async function GET(req: Request) {
     const {searchParams} = new URL(req.url);
     const userId = searchParams.get("userId") ?? "";
-    console.log("User ID", userId);
+    
     const db = getDb();
     try {
         const result = await db.select({ streak: usersTable.streak })
@@ -17,7 +17,7 @@ export async function GET(req: Request) {
             .where(eq(usersTable.user_id, userId as string))
             .execute();
 
-        console.log("User streak", result);
+
         return NextResponse.json(result, {
             headers: {
                 "Cache-Control": "no-store, max-age=0",

@@ -36,6 +36,18 @@ export default function Game() {
   const [currentScore, setCurrentScore] = useState(0);
   const { user, isSignedIn, isLoaded } = useUser();
 
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (!isHowToPlayOpen && timeLeft > 0 && !isGameOver) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      setIsGameOver(true);
+      setStreak(0);
+    }
+    return () => clearInterval(timer);
+  }, [timeLeft, isHowToPlayOpen, isGameOver]);
   const fetchStreak = useCallback(async () => {
     if (!user || !isLoaded) return;
     try {
@@ -56,19 +68,7 @@ export default function Game() {
       console.log(error);
     }
   }, [user, isLoaded]);
-  useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
-    if (!isHowToPlayOpen && timeLeft > 0 && !isGameOver) {
-      timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsGameOver(true);
-      setStreak(0);
-    }
-    return () => clearInterval(timer);
-  }, [timeLeft, isHowToPlayOpen, isGameOver]);
-
+  
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -195,22 +195,26 @@ export default function Game() {
   }
   const handleGameOver = useCallback(async () => {
     if (user && isSignedIn && isLoaded) {
-      await fetch("/api/saveUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-          "Pragma": "no-cache",
-          "Expires": "0",
-        },
-        body: JSON.stringify({
-          user_id: user.id,
-          name: user.fullName,
-          profile_pic: user.imageUrl,
-          streak: streak,
-        }),
-      });
-
+   
+        // If the game ends without a win, reset the streak to 0
+        await fetch("/api/saveUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
+          },
+          body: JSON.stringify({
+            user_id: user.id,
+            name: user.fullName,
+            profile_pic: user.imageUrl,
+            streak: highestScore === 1000 ? streak : 0, // Reset streak to 0
+          }),
+        });
+      
+  
+      // Save leaderboard data
       await fetch("/api/saveLeaderboard", {
         method: "POST",
         headers: {
@@ -225,6 +229,7 @@ export default function Game() {
           gamesWon: highestScore === 1000 ? 1 : 0,
         }),
       });
+  
       fetchStreak();
     }
   }, [user, isSignedIn, isLoaded, streak, highestScore, fetchStreak]);
