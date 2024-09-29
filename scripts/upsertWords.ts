@@ -5,7 +5,7 @@ import { embedAndStoreDocs } from "../lib/vector-store.ts";
 export async function upsertWordsToPinecone() {
     try {
         const pineconeClient = await getPineconeClient();
-        const docs = await getChunkedDocsFromTXT("data/words.txt");
+        const docs = await getChunkedDocsFromTXT("data/words2.txt");
         await embedAndStoreDocs(pineconeClient, docs);
     } catch (e) {
         console.error(e);

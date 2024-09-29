@@ -92,7 +92,7 @@ export function getSimilarityScore(cosScore: number) {
     return Math.floor((cosScore / 0.75) * 100);
   } else if (cosScore >= 0.87) {
     // Map cosScore from [0.87, 1] to [950, 1000]
-    return Math.ceil(((cosScore - 0.87) / (1 - 0.87)) * 50 + 950);
+    return Math.floor(((cosScore - 0.87) / (1 - 0.87)) * 50 + 950);
   } else if (cosScore >= 0.85) {
     // Map cosScore from [0.85, 0.87) to [900, 950)
     return Math.floor(((cosScore - 0.85) / (0.87 - 0.85)) * 50 + 900);
@@ -106,9 +106,31 @@ export function getSimilarityScore(cosScore: number) {
     // Map cosScore from [0.75, 0.83) to [100, 800)
     return Math.floor(((cosScore - 0.75) / (0.83 - 0.75)) * 700 + 100);
   } */
-  
+
   const cosSim = Math.ceil(((cosScore - 0.75) / 0.10) * 1000);
 
-  return Math.min(1000, cosSim);
+  return Math.min(999, cosSim);
+}
+
+export async function scoreResponse(guessedWord: string, targetWord: string) {
+  try {
+    const tWordVector = await getWordVector(targetWord);
+
+    let gWordVector = await getWordVector(guessedWord);
+    if (gWordVector[0] === 0 && gWordVector[1] === 0) { //word vector is all 0 because not in vector store
+      return { similarityScore: 0 };
+    }
+    else if (guessedWord === targetWord) {
+      return { similarityScore: 1000 };
+    }
+    
+    const cosSim = cosineSimilarity(tWordVector, gWordVector);
+    const simScore = getSimilarityScore(cosSim);
+    //return a JSON object with the similarity score
+    return { similarityScore: simScore };
+  }
+  catch (error) {
+    return { similarityScore: 0 };
+  }
 }
 
