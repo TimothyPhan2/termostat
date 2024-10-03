@@ -14,6 +14,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import GiveUpButton from "./GiveUpButton";
 
+
 type GuessType = {
   word: string;
   similarityScore: number;
@@ -33,6 +34,8 @@ export default function Game() {
   const [hasGuessed, setHasGuessed] = useState(false);
   const [streak, setStreak] = useState(0);
   const [currentScore, setCurrentScore] = useState(0);
+  const { user, isSignedIn, isLoaded } = useUser();
+
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (!isHowToPlayOpen && timeLeft > 0 && !isGameOver) {
@@ -45,12 +48,34 @@ export default function Game() {
     }
     return () => clearInterval(timer);
   }, [timeLeft, isHowToPlayOpen, isGameOver]);
-
+  const fetchStreak = useCallback(async () => {
+    if (!user || !isLoaded) return;
+    try {
+      const response = await fetch(`/api/getStreak?userId=${user?.id}`, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+          "Pragma": "no-cache",
+          "Expires": "0",
+        },
+      });
+      const data = await response.json();
+  
+      setStreak(data[0].streak);
+    
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user, isLoaded]);
+  
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
+
+ 
   const fetchWord = useCallback(async () => {
     try {
       const response = await fetch(`/api/targetWord/${Date.now()}`, {
@@ -65,6 +90,7 @@ export default function Game() {
       const data = await response.json();
 
       setTargetWord(data.targetWord);
+      
       setHints([data.hints.hint1, data.hints.hint2, data.hints.hint3]);
       setPlayAgain(false);
     } catch (error) {
@@ -113,6 +139,7 @@ export default function Game() {
       //const parsedData = JSON.parse(data.answer);
       
       const similarityScore = data.similarityScore; //changed from parsedData.similarityScore
+      console.log("sim:", similarityScore);
       setCurrentScore(similarityScore);
 
       const newGuess = { word: currentGuess.toLowerCase(), similarityScore: similarityScore };
@@ -158,29 +185,36 @@ export default function Game() {
     setCurrentGuess("");
     setCurrentScore(0);
   };
-  const { user, isSignedIn, isLoaded } = useUser();
 
+
+  useEffect(() => {
+    fetchStreak();
+  }, [fetchStreak]);
   const handleGiveUp = () => {
     setIsGameOver(true);
   }
   const handleGameOver = useCallback(async () => {
     if (user && isSignedIn && isLoaded) {
-      await fetch("/api/saveUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-          "Pragma": "no-cache",
-          "Expires": "0",
-        },
-        body: JSON.stringify({
-          user_id: user.id,
-          name: user.fullName,
-          profile_pic: user.imageUrl,
-          streak: streak,
-        }),
-      });
-
+   
+        // If the game ends without a win, reset the streak to 0
+        await fetch("/api/saveUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Expires": "0",
+          },
+          body: JSON.stringify({
+            user_id: user.id,
+            name: user.fullName,
+            profile_pic: user.imageUrl,
+            streak: highestScore === 1000 ? streak : 0, // Reset streak to 0
+          }),
+        });
+      
+  
+      // Save leaderboard data
       await fetch("/api/saveLeaderboard", {
         method: "POST",
         headers: {
@@ -195,8 +229,10 @@ export default function Game() {
           gamesWon: highestScore === 1000 ? 1 : 0,
         }),
       });
+  
+      fetchStreak();
     }
-  }, [user, isSignedIn, isLoaded, streak, highestScore]);
+  }, [user, isSignedIn, isLoaded, streak, highestScore, fetchStreak]);
 
   useEffect(() => {
     if (isGameOver) {
