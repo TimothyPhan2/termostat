@@ -1,12 +1,14 @@
 import { getChunkedDocsFromTXT } from "../lib/txt-loader.ts";
 import { getPineconeClient } from "../lib/pinecone-client.ts";
 import { embedAndStoreDocs } from "../lib/vector-store.ts";
+import { env } from "../lib/config.ts";
+
 
 export async function upsertWordsToPinecone() {
     try {
         const pineconeClient = await getPineconeClient();
-        const docs = await getChunkedDocsFromTXT("data/words2.txt");
-        await embedAndStoreDocs(pineconeClient, docs);
+        const docs = await getChunkedDocsFromTXT("data/allWords.txt");
+        await embedAndStoreDocs(pineconeClient, docs, env.PINECONE_NAMESPACE_ALLWORDS);
     } catch (e) {
         console.error(e);
     }

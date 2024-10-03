@@ -7,30 +7,31 @@ import { getPineconeClient } from './pinecone-client.ts';
 export async function embedAndStoreDocs(
   client: Pinecone,
   // @ts-ignore docs type errors
-  docs: Document<Record<string, any>>[]
+  docs: Document<Record<string, any>>[],
+  namespace: string
 ) {
   /*create and store the embeddings in the vectorStore*/
   try {
-    docs.forEach((doc, index) => {
+    /* docs.forEach((doc, index) => {
       if (!doc.text) {
         console.warn(`Document ${index} has an undefined or empty text field`);
       }
-    });
+    }); */
 
     const embeddings = new OpenAIEmbeddings({ apiKey: env.OPENAI_API_KEY });
     const index = client.Index(env.PINECONE_INDEX_NAME);
     //delete any existing namespace before storing new docs
     const stats = await index.describeIndexStats();
-    const namespaceExists = stats.namespaces && stats.namespaces[env.PINECONE_NAMESPACE];
+    const namespaceExists = stats.namespaces && stats.namespaces[namespace];
     if (namespaceExists) {
-      await index.namespace(env.PINECONE_NAMESPACE).deleteAll();
+      await index.namespace(namespace).deleteAll();
     }
 
     //embed the TXT documents
     // namespaces are separated in pinecone by the userId
     await PineconeStore.fromDocuments(docs, embeddings, {
       pineconeIndex: index,
-      namespace: env.PINECONE_NAMESPACE,
+      namespace: namespace,
       textKey: 'text',
     });
     console.log('Docs embedded and stored successfully !');
@@ -58,10 +59,10 @@ export async function getVectorStore(client: Pinecone) {
   }
 }
 
-export async function getWordVector(word: string) {
+export async function getWordVector(word: string, namespace: string) {
   const client = await getPineconeClient();
   const index = client.Index(env.PINECONE_INDEX_NAME);
-  const queryResponse = await index.namespace(env.PINECONE_NAMESPACE).query({
+  const queryResponse = await index.namespace(namespace).query({
     topK: 1,
     vector: new Array(1536).fill(0),  // Placeholder vector
     filter: {
@@ -114,9 +115,9 @@ export function getSimilarityScore(cosScore: number) {
 
 export async function scoreResponse(guessedWord: string, targetWord: string) {
   try {
-    const tWordVector = await getWordVector(targetWord);
+    const tWordVector = await getWordVector(targetWord, env.PINECONE_NAMESPACE);
 
-    let gWordVector = await getWordVector(guessedWord);
+    let gWordVector = await getWordVector(guessedWord, env.PINECONE_NAMESPACE);
     if (gWordVector[0] === 0 && gWordVector[1] === 0) { //word vector is all 0 because not in vector store
       return { similarityScore: 0 };
     }
