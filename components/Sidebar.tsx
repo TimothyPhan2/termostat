@@ -67,7 +67,7 @@ export default function Sidebar({
         <h3 className="text-lg font-semibold mb-2">Score Legend</h3>
         <div className="space-y-2">
           <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+            <div className="w-4 h-4 rounded-full bg-blue-700 mr-2"></div>
             <span>0-349: Very Cold</span>
           </div>
           <div className="flex items-center">

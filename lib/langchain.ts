@@ -18,7 +18,7 @@ export async function callChain(guessedWord: string, targetWord: string) {
 
   // const targetWord = await getRandomLine("data/words.txt"); //gets random word from words.txt
 
-  const tWordVector = await getWordVector(targetWord);
+  const tWordVector = await getWordVector(targetWord, env.PINECONE_NAMESPACE);
   const gWordVector = (await embeddings.embedDocuments([guessedWord]))[0];
   const cosSim = cosineSimilarity(tWordVector, gWordVector);
   console.log(cosSim);

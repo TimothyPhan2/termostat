@@ -166,7 +166,7 @@ export default function Game() {
   };
 
   const getTemperatureColor = (score: number) => {
-    if (score < 350) return "bg-blue-500";
+    if (score < 350) return "bg-blue-700";
     if (score < 550) return "bg-purple-600";
     if (score < 750) return "bg-orange-500";
     return "bg-red-500";
