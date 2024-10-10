@@ -26,10 +26,10 @@ export default function GameOverModal({ highestScore, targetWord, onResetGame, o
         </div>
         <p className="mb-4">
           {highestScore === 1000 ? (
-            "Congratulations! You've guessed the word!"
+            "Congratulations! You&#39;ve guessed the word!"
           ) : (
             <>
-              Time's up! The target word was "<span>{targetWord}</span> "
+              Time&#39;s up! The target word was &quot;<span>{targetWord}</span>&quot;
             </>
           )}
         </p>

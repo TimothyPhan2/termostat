@@ -41,7 +41,7 @@ const AnimatedThermometer = () => {
     }, 2000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [words])
 
   const getTemperatureColor = (score: number) => {
     if (score < 350) return "bg-blue-700"
@@ -81,14 +81,14 @@ export default function LandingPage() {
       answer: "Yes, each game has a time limit of 10 minutes. The game is over once you run out of time or guess the word correctly."
     },
     {
-      question: "Can I see other players' scores and rank?",
+      question: "Can I see other players&#39; scores and rank?",
       answer: "Termometer includes a global leaderboard where you can see the top players and their scores. Compete with players worldwide and climb the ranks to showcase your word mastery."
     }
   ]
 
   return (
     // bg-gradient-to-r from-neutral-700 via-neutral-900 to-neutral-700
-    <div className="flex flex-col min-h-screen  text-gray-800"> 
+    <div className="flex flex-col min-h-screen text-gray-800">
       <header className="px-4 lg:px-6 h-16 flex items-center bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-800 shadow-sm relative">
         <Link href="#" className="flex items-center justify-center">
           <span className="ml-2 text-2xl text-white">Termometer</span>
@@ -104,7 +104,7 @@ export default function LandingPage() {
             <span className="text-white">ometer</span>
           </h1>
           <p className="text-xl mb-8 text-gray-300">
-          Turn up the heat on your vocabulary
+            Turn up the heat on your vocabulary
           </p>
 
           <div className="mt-8 space-y-4">
@@ -148,8 +148,8 @@ export default function LandingPage() {
               <h2 className="text-3xl mb-4 text-gray-800">Similarity Score</h2>
               <p className="text-gray-600">
                 Our unique similarity score system provides instant feedback on your guesses.
-                The higher the score, the closer you are to the target word. Watch the 'termometer'
-                rise as you get "hotter" with each guess, guiding you towards the correct answer.
+                The higher the score, the closer you are to the target word. Watch the &apos;termometer&apos;
+                rise as you get &quot;hotter&quot; with each guess, guiding you towards the correct answer.
               </p>
             </div>
             <div className="md:w-1/2">
@@ -160,53 +160,41 @@ export default function LandingPage() {
 
         <div className="w-full max-w-4xl mx-auto px-4 mb-32 p-8 bg-white rounded-lg shadow-md border-4 border-blue-700">
           <h2 className="text-3xl mb-6 text-center">Leaderboard</h2>
-          <p className="mb-4 ml-4">Termometer's leaderboard displays all of our players, ranked upon their scores and amount of games won.</p>
+          <p className="mb-4 ml-4">Termometer&apos;s leaderboard displays all of our players, ranked upon their scores and amount of games won.</p>
           <div className="bg-gray-100 p-4 rounded-lg mb-4 ml-4 mr-4">
             <h3 className="text-xl mb-4">Top Players</h3>
             <ol className="list-none">
               <li className="flex items-center mb-2">
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-4">
-                  <User className="w-6 h-6 text-gray-600" />
+                  <User className="w-5 h-5 text-gray-600" />
                 </div>
-                <span>Player 1</span>
+                <span className="text-gray-800 font-medium">Player 1 - 1,200 pts</span>
               </li>
               <li className="flex items-center mb-2">
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-4">
-                  <User className="w-6 h-6 text-gray-600" />
+                  <User className="w-5 h-5 text-gray-600" />
                 </div>
-                <span>Player 2</span>
+                <span className="text-gray-800 font-medium">Player 2 - 1,100 pts</span>
               </li>
-              <li className="flex items-center">
+              <li className="flex items-center mb-2">
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-4">
-                  <User className="w-6 h-6 text-gray-600" />
+                  <User className="w-5 h-5 text-gray-600" />
                 </div>
-                <span>Player 3</span>
+                <span className="text-gray-800 font-medium">  - 1,000 pts</span>
               </li>
             </ol>
           </div>
-          <div className="text-center">
-            <Button asChild>
-              <Link href="/leaderboard">
-                View Full Leaderboard
-              </Link>
-            </Button>
-          </div>
         </div>
 
-        <div className="w-full max-w-4xl mx-auto px-4 mb-16 p-8 bg-white rounded-lg shadow-md border-4 border-blue-700">
-          <h2 className="text-3xl mb-6 text-center">FAQ</h2>
-          {faqItems.map((item, index) => (
-            <FAQItem key={index} question={item.question} answer={item.answer} />
-          ))}
+        <div className="w-full max-w-4xl mx-auto px-4 mb-32 p-8 bg-white rounded-lg shadow-md border-4 border-blue-700">
+          <h2 className="text-3xl mb-6 text-center">Frequently Asked Questions</h2>
+          <div>
+            {faqItems.map((faqItem, index) => (
+              <FAQItem key={index} question={faqItem.question} answer={faqItem.answer} />
+            ))}
+          </div>
         </div>
       </main>
-      <footer className="w-full px-4 py-6 bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-white">
-            &copy; 2024 Termometer. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }
