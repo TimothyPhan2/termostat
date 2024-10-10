@@ -36,7 +36,7 @@ const ITEMS_PER_PAGE = 10;
 const getRankIcon = (rank: number) => {
   switch (rank) {
     case 1:
-      return <Trophy className="h-4 w-4 sm:h-6 sm:w-6 text-yellow-400" />;
+      return <Trophy className="h-4 w-4 sm:h-6 sm:w-8 text-yellow-400" />;
     case 2:
       return <Medal className="h-4 w-4 sm:h-6 sm:w-6 text-gray-400" />;
     case 3:
@@ -117,9 +117,9 @@ export default function LeaderboardComponent() {
         <BackButton className="absolute top-4 left-4" />
       </div>
     <div className="container mx-auto  p-2 sm:p-4 min-h-screen flex flex-col">
-      <Card className="flex-grow flex flex-col">
+      <Card className="flex-grow flex flex-col bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-800 border border-neutral-500">
         <CardHeader>
-          <CardTitle className="text-2xl sm:text-3xl font-bold text-center">
+          <CardTitle className="text-2xl sm:text-4xl text-center text-neutral-500">
             Leaderboard
           </CardTitle>
         </CardHeader>
@@ -130,7 +130,7 @@ export default function LeaderboardComponent() {
           </div>
           ) : (
             <>
-              <div className="overflow-x-auto flex-grow">
+              <div className="overflow-x-auto flex-grow text-white">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -210,7 +210,7 @@ export default function LeaderboardComponent() {
                   </TableBody>
                 </Table>
               </div>
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center text-neutral-500">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>

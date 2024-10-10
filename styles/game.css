@@ -12,10 +12,6 @@
     background-position: center; /* Adjust as needed */
   }
   
-  body h1, a, h2, h3, Button {
-    font-family: 'DesignerFont', sans-serif;
-  }
-
-  .customFont {
+  body h1, a, h2, h3, Button, span, Input {
     font-family: 'DesignerFont', sans-serif;
   }

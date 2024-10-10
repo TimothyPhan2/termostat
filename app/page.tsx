@@ -52,14 +52,14 @@ const AnimatedThermometer = () => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="text-center mb-2 text-2xl font-bold">{currentWord}</div>
+      <div className="text-center mb-2 text-2xl customFont">{currentWord}</div>
       <div className="mb-4 relative h-8 bg-gray-300 rounded-full overflow-hidden">
         <div
           className={`absolute top-0 left-0 h-full transition-all duration-500 ease-in-out ${getTemperatureColor(currentScore)}`}
           style={{ width: `${(currentScore / 1000) * 100}%` }}
         ></div>
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-          <span className="text-sm font-bold text-black">{currentScore}</span>
+          <span className="text-sm customFont text-black">{currentScore}</span>
         </div>
       </div>
     </div>
@@ -70,19 +70,19 @@ export default function LandingPage() {
   const faqItems = [
     {
       question: "What is Termometer?",
-      answer: "Termometer is a word association game that challenges players to guess a secret word based on temperature-like feedback for each guess."
+      answer: "Termometer is a word association game that challenges players to guess a secret word based on a temperature score for each guess."
     },
     {
       question: "How do I play?",
-      answer: "Enter your guesses in the input field. The game will show you how 'hot' or 'cold' your guess is compared to the secret word. Use this feedback to refine your guesses and try to find the word before time runs out!"
+      answer: "Enter your guesses in the input field. The termometer will fluctuate and give you a score based on how close your guessed word is. Use this feedback to refine your guesses and try to guess the word before time runs out!"
     },
     {
       question: "Is there a time limit?",
-      answer: "Yes, each game has a time limit. The exact duration may vary, but you'll need to guess the word before the timer runs out."
+      answer: "Yes, each game has a time limit of 10 minutes. The game is over once you run out of time or guess the word correctly."
     },
     {
-      question: "Can I play on mobile devices?",
-      answer: "Termometer is designed to be responsive and playable on both desktop and mobile devices."
+      question: "Can I see other players' scores and rank?",
+      answer: "Termometer includes a global leaderboard where you can see the top players and their scores. Compete with players worldwide and climb the ranks to showcase your word mastery."
     }
   ]
 
@@ -200,15 +200,11 @@ export default function LandingPage() {
           ))}
         </div>
       </main>
-      <footer className="w-full px-4 py-6 bg-gray-100">
+      <footer className="w-full px-4 py-6 bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-white">
             &copy; 2024 Termometer. All rights reserved.
           </p>
-          <div className="flex items-center mt-4 sm:mt-0">
-            <a href="https://github.com/yourusername/termometer" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 transition-colors">
-            </a>
-          </div>
         </div>
       </footer>
     </div>

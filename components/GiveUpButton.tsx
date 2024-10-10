@@ -23,12 +23,12 @@ export default function GiveUpButton({ onGiveUp, isGameActive }: GiveUpButtonPro
       <AlertDialogTrigger asChild>
         <Button 
           variant="destructive" 
-          size="sm" 
-          className="flex items-center space-x-2"
+          size="lg" 
+          className="flex items-center space-x-2 w-full"
           disabled={!isGameActive}
         >
-          <Flag className="h-4 w-4" />
           <span>Give Up</span>
+          <Flag className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
