@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Thermometer, Github, ChevronDown, ChevronUp, Clock, Brain, Trophy, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import "../styles/landing.css";
+import "../styles/fonts.css";
 
 interface FAQItemProps {
   question: string;
