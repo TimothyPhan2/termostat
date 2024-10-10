@@ -81,7 +81,7 @@ export default function LandingPage() {
       answer: "Yes, each game has a time limit of 10 minutes. The game is over once you run out of time or guess the word correctly."
     },
     {
-      question: "Can I see other players&#39; scores and rank?",
+      question: "Can I see other players scores and rank?",
       answer: "Termometer includes a global leaderboard where you can see the top players and their scores. Compete with players worldwide and climb the ranks to showcase your word mastery."
     }
   ]
@@ -180,7 +180,7 @@ export default function LandingPage() {
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-4">
                   <User className="w-5 h-5 text-gray-600" />
                 </div>
-                <span className="text-gray-800 font-medium">  - 1,000 pts</span>
+                <span className="text-gray-800 font-medium">Player 3 - 1,000 pts</span>
               </li>
             </ol>
           </div>
