@@ -9,6 +9,7 @@ import Link from "next/link";
 import GiveUpButton from "./GiveUpButton";
 import { UserButton, useUser } from "@clerk/nextjs";
 import "../styles/game.css";
+import "../styles/fonts.css";
 
 type GuessType = {
   word: string;

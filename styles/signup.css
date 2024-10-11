@@ -8,12 +8,7 @@
   }
 }
 
-@font-face {
-  font-family: 'DesignerFont';
-  src: url('/fonts/Designer.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 body {
   font-family: 'DesignerFont', sans-serif;
