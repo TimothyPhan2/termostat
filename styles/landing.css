@@ -8,9 +8,9 @@
   }
   
   body h1, a, h2, h3, Button {
-    font-family: 'DesignerFont', sans-serif;
+    font-family: var(--font-designer);
   }
 
   .customFont {
-    font-family: 'DesignerFont', sans-serif;
+    font-family: var(--font-designer);
   }

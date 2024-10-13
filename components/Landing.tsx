@@ -98,10 +98,7 @@ export default function LandingPage() {
       <main className="flex-1 flex flex-col items-center justify-start px-4">
         <div className="max-w-4xl mx-auto text-center mt-32 mb-16 p-8">
           <h1 className="text-8xl mb-6">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white">
-              Term
-            </span>
-            <span className="text-white">ometer</span>
+            <span className="text-white">Termometer</span>
           </h1>
           <p className="text-xl mb-8 text-gray-300">
             Turn up the heat on your vocabulary

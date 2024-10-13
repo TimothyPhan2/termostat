@@ -8,5 +8,5 @@
   }
   
   body h1, a, h2, h3, Button, span, Input {
-    font-family: 'DesignerFont', sans-serif;
+    font-family: var(--font-designer);
   }

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "../styles/fonts.css";
+import localFont from 'next/font/local';
 import {
   ClerkProvider,
   SignInButton,
@@ -11,6 +12,10 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+const designer = localFont({ 
+  src: '../public/fonts/Designer.otf',
+  variable: '--font-designer',
+});
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" >
+      <html lang="en" className={`${designer.variable}`} >
       <head>
           <link
             rel="preload"
