@@ -295,7 +295,7 @@ export default function Game() {
             <div className="flex flex-col space-y-2">
               <div className="flex justify-between items-center">
                 <div className="flex items-center bg-black px-3 py-1 rounded-full">
-                  <Flame className="h-4 w-4 mr-2" />
+                  <Flame className="h-4 w-4 mr-2 text-orange-500" />
                   <span>Streak: {streak}</span>
                 </div>
                 <div className="flex items-center bg-blue-700 px-3 py-1 rounded-full">
