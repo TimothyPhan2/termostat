@@ -45,6 +45,7 @@ export default function Game() {
       }, 1000);
     } else if (timeLeft === 0) {
       setIsGameOver(true);
+      setStreak(0);
     }
     return () => clearInterval(timer);
   }, [timeLeft, isGameStarted, isGameOver]);
@@ -195,7 +196,7 @@ export default function Game() {
   };
 
   const handleGameOver = useCallback(async () => {
-    if (isSignedIn && user) {
+    if (user && isSignedIn && isLoaded) {
       const newStreak = highestScore === 1000 ? streak : 0;
       await fetch("/api/saveUser", {
         method: "POST",
@@ -207,6 +208,8 @@ export default function Game() {
         },
         body: JSON.stringify({
           user_id: user.id,
+          name: user.fullName,
+          profile_pic: user.imageUrl,
           streak: newStreak,
         }),
       });
@@ -225,12 +228,9 @@ export default function Game() {
           gamesWon: highestScore === 1000 ? 1 : 0,
         }),
       });
-
-      if (highestScore !== 1000) {
-        setStreak(0);
-      }
+      fetchStreak();
     }
-  }, [isSignedIn, user, streak, highestScore]);
+  }, [user, isSignedIn, isLoaded, streak, highestScore, fetchStreak]);
 
   useEffect(() => {
     if (isGameOver) {
